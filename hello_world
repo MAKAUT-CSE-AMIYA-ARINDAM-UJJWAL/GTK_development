@@ -1,0 +1,49 @@
+import gi
+
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk
+
+
+class ButtonWindow(Gtk.Window):
+    def __init__(self):
+        super().__init__(title="HELLO WORLD")
+        self.set_border_width(100)
+
+
+        hbox = Gtk.Box(spacing=60)
+        self.add(hbox)
+
+        button = Gtk.Button.new_with_label("Click Me")
+        button.connect("clicked", self.on_click_me_clicked)
+        hbox.pack_start(button, True, True, 0)
+
+
+        button = Gtk.Button.new_with_mnemonic("_Close")
+        button.connect("clicked", self.on_close_clicked)
+        hbox.pack_start(button, True, True, 0)
+
+    def on_click_me_clicked(self, button):
+        dialog = Gtk.MessageDialog(
+            transient_for=self,
+            flags=0,
+            message_type=Gtk.MessageType.INFO,
+            buttons=Gtk.ButtonsType.OK,
+            text="This is an Secondary window",
+        )
+        dialog.run()
+
+        dialog.destroy()
+        Gtk.main_quit()
+
+
+
+
+    def on_close_clicked(self, button):
+        print("Closing application")
+        Gtk.main_quit()
+
+
+win = ButtonWindow()
+win.connect("destroy", Gtk.main_quit)
+win.show_all()
+Gtk.main()
