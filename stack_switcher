@@ -1,0 +1,33 @@
+from gi.repository import Gtk
+
+class MainWindow(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self, title="Stack Switcher")
+        self.set_border_width(100)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=50)
+        self.add(box)
+
+        #the main area(stack)
+        main_area =Gtk.Stack()
+        main_area.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
+        main_area.set_transition_duration(2000)
+
+        #checkbox
+        check_button =Gtk.CheckButton("This is a checkbox")
+        main_area.add_titled(check_button, "check_name", "Check Box Mode")
+
+        #label
+        label = Gtk.Label()
+        label.set_markup("<big> HUGE TEXT WITH MARKUP</big>")
+        main_area.add_titled(label, "label_name", "Enable Big Label")
+
+        #stack switcher
+        stack_switcher = Gtk.StackSwitcher()
+        stack_switcher.set_stack(main_area)
+        box.pack_start(stack_switcher, True, True,0)
+        box.pack_start(main_area, True, True, 0)
+
+window = MainWindow()
+window.connect("delete-event",Gtk.main_quit)
+window.show_all()
+Gtk.main()
