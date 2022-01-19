@@ -1,0 +1,48 @@
+
+import gi
+
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk
+
+
+class GridWindow(Gtk.Window):
+    def __init__(self):
+
+        super().__init__(title="Resume Builder DEMO")
+        self.set_default_size(1000, 500)
+
+        self.box= Gtk.Box(spacing=10)
+        self.set_border_width(100)
+        box= Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=50)
+        self.add(box)
+
+        main_area = Gtk.Stack()
+        main_area.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
+        main_area.set_transition_duration(2000)
+
+        # 1
+        label= Gtk.Label()
+        label.set_markup("<big>Text about how to use this widget</big>")
+        main_area.add_titled(label, "label_name1", "HOW TO USE")
+
+        #2
+        label = Gtk.Label()
+        label.set_markup("<big> Next window to pop up [UNDER CONSTRUCTION]</big>")
+        main_area.add_titled(label, "label_name2", "START BUILDING")
+
+        #3
+        label = Gtk.Label()
+        label.set_markup("<big> https://github.com/MAKAUT-CSE-AMIYA-ARINDAM-UJJWAL/GTK_development</big>")
+        main_area.add_titled(label, "label_name3", "ABOUT US")
+
+
+        # stack switcher
+        stack_switcher = Gtk.StackSwitcher()
+        stack_switcher.set_stack(main_area)
+        box.pack_start(stack_switcher, True, True, 0)
+        box.pack_start(main_area, True, True, 0)
+
+win = GridWindow()
+win.connect("destroy", Gtk.main_quit)
+win.show_all()
+Gtk.main()
