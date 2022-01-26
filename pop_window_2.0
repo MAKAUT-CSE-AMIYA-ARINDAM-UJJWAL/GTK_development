@@ -1,0 +1,52 @@
+## handling popup windows
+
+from gi.repository import Gtk
+
+class MainWindow(Gtk.Window):                            # this represents the main window "Mainwindow"
+    def __init__(self):
+        Gtk.Window.__init__(self, title="POPUP working")
+
+        self.set_default_size(300,100)
+        self.set_border_width(10)
+
+        button= Gtk.Button("Open a pop-up")
+        button.connect("clicked", self.button_clicked)
+        self.add(button)
+
+    def button_clicked(self,widget):
+        dialogue= Popup(self)                             #Popup class will be called when the button is clicked
+        response = dialogue.run()                         # the pop up is gonna appear and its gonna wait for the user to do something
+                                                          # and once they do something and close the pop up window then its gonna store the response in the "response variable"
+                                                          # if the pop up windows asks you abt yes/ no then its gonna return the same and it will be stored in the resposnse variable
+        if response== Gtk.ResponseType.OK:                # there are multiple inbuilt response types provided by the GTK
+            print("You clicked the OK button")
+        elif response== Gtk.ResponseType.CANCEL:
+            print("you clicked the CANCEL button")
+        dialogue.destroy()                                # closes the popup window
+
+
+class Popup(Gtk.Dialog):                                  #we are creating a pop up dialog box so we inherit from Gtk.Dialog class
+    def __init__(self, parent):                           #the parent is a reference to that "Mainwindow"
+        Gtk.Dialog.__init__(self,"POPUP TITLE", parent, Gtk.DialogFlags.MODAL,("Custom CANCEL text",Gtk.ResponseType.CANCEL,                      #adding buttons and its responses
+                                                                               "Custom OK",Gtk.ResponseType.OK ))
+                                                                                                                                                  #Gtk.DialogFlags.MODAL--> this command disables access to the main window till the POP UP window is open
+                                                                                                                                                  #the () after the .MODAL allows us to add buttons... (text_on_the_button, what happens when the user clicks the button)
+        self.set_default_size(300, 100)
+        self.set_border_width(30)
+
+        #popup dialog box prompt_text
+        area= self.get_content_area()                            #  here the variable named "area" is used to get access to the content area
+        area.add(Gtk.Label("Wow the area is amaizing!!"))        # we add lable to the context area
+        button= Gtk.Button("BUTTON_1")                           #we do add a button to the area
+        button.connect("clicked",self.button_clicked)
+        area.add(button)
+        self.show_all()
+
+    def button_clicked(self, widget):
+            print("BUTTON was clicked from the pop up dialog box")
+
+
+window= MainWindow()
+window.connect("delete-event", Gtk.main_quit)
+window.show_all()
+Gtk.main()
